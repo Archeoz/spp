@@ -108,9 +108,10 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ url('histori') }}" class="nav-link">
-                        <i class="nav-icon fas fa-history"></i>
-                    <p>Riwayat Pembayaran</p>
-                    <p style="margin-left: 33px">Spp</p>
+                        <i class="nav-icon fas fa-history"></i>|<i class="nav-icon fas fa-file-invoice-dollar"></i>
+                    <p>Riwayat & Tagihan </p>
+                    <br>
+                    <p style="margin-left: 67px">Pembayaran Spp</p>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -121,24 +122,26 @@
                 </li>
             @elseif (Auth::guard('petugas')->check() && Auth::guard('petugas')->user()->level == 'petugas')
                 <li class="nav-item">
-                    <a href="{{ url('tampilpembayaranpagepetugas') }}" class="nav-link">
+                    <a href="{{ url('tampilpembayaranpetugas') }}" class="nav-link">
                         <i class="nav-icon fas fa-money-check-alt"></i>
                     <p>Pembayaran Spp</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ url('historipetugas') }}" class="nav-link">
-                        <i class="nav-icon fas fa-history"></i>
-                    <p>Riwayat Pembayaran</p>
-                    <p style="margin-left: 33px">Spp</p>
+                        <i class="nav-icon fas fa-history"></i>|<i class="nav-icon fas fa-file-invoice-dollar"></i>
+                        <p>Riwayat & Tagihan </p>
+                        <br>
+                        <p style="margin-left: 67px">Pembayaran Spp</p>
                     </a>
                 </li>
             @elseif (Auth::guard('siswa')->check() && Auth::guard('siswa')->user())
                 <li class="nav-item">
                     <a href="{{ url('historisiswa') }}" class="nav-link">
-                        <i class="nav-icon fas fa-history"></i>
-                    <p>Riwayat Pembayaran</p>
-                    <p style="margin-left: 33px">Spp</p>
+                        <i class="nav-icon fas fa-history"></i>|<i class="nav-icon fas fa-file-invoice-dollar"></i>
+                        <p>Riwayat & Tagihan </p>
+                        <br>
+                        <p style="margin-left: 67px">Pembayaran Spp</p>
                     </a>
                 </li>
             @endif

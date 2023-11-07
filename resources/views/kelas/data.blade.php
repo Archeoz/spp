@@ -29,6 +29,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>Id Kelas</th>
                                 <th>Nama Kelas</th>
                                 <th>Opsi</th>
                             </tr>
@@ -40,6 +41,7 @@
                             @foreach ($kelas as $kelas)
                             <tr>
                                 <td>{{ $no++ }}</td>
+                                <td>{{ $kelas->id_kelas }}</td>
                                 <td>{{ $kelas->nama_kelas }}</td>
                                 <td>
                                     <a href="{{ url('editkelaspage/'.$kelas->id_kelas) }}" class="mr-2 text-warning"><i class="fas fa-edit"></i></a>

@@ -29,6 +29,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>Id Spp</th>
                                 <th>Bulan</th>
                                 <th>Tahun</th>
                                 <th>Nominal</th>
@@ -44,6 +45,7 @@
                             @foreach ($spp as $spp)
                             <tr>
                                 <td>{{ $no++ }}</td>
+                                <td>{{ $spp->id_spp }}</td>
                                 <td>{{ $spp->bulan }}</td>
                                 <td>{{ $spp->tahun }}</td>
                                 <td>{{ $spp->nominal }}</td>

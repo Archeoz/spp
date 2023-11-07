@@ -96,6 +96,10 @@ Route::group(['middleware' => ['auth:petugas']],function() {
         Route::post('kirimnisn',[PembayaranController::class, 'sesinisn']);
         Route::get('batalpembayaran',[PembayaranController::class, 'batalpembayaran']);
 
+        // Session Histori Admin
+        Route::get('kirimsesihistorisiswa',[PembayaranController::class, 'sesihistori']);
+        Route::get('hapussesihistorisiswa',[PembayaranController::class, 'hapussesihistori']);
+
         // History Pembayaran
         Route::get('histori',[PembayaranController::class, 'show']);
 
@@ -107,13 +111,20 @@ Route::group(['middleware' => ['auth:petugas']],function() {
     Route::group(['middleware' => ['CekLoginPetugas:petugas']],function() {
         // Pembayaran Spp
         Route::get('tampilpembayaranpetugas',[PembayaranController::class, 'tampilnisn']);
+        Route::get('registerpembayaranpagepetugas',[PembayaranController::class, 'registerpage']);
         Route::post('kirimnisnpetugas',[PembayaranController::class, 'tampilregister']);
         Route::post('kirimspppetugas',[PembayaranController::class, 'kirimspp']);
+
+        // Session Histori Admin
+        Route::get('kirimsesihistorisiswapetugas',[PembayaranController::class, 'sesihistori']);
+        Route::get('hapussesihistorisiswapetugas',[PembayaranController::class, 'hapussesihistori']);
 
         // Session Spp
         Route::get('ambilspppetugas',[PembayaranController::class, 'buatsession']);
         Route::get('hapussesipetugas/{id_spp}',[PembayaranController::class, 'hapussesi']);
         Route::get('hapussemuapetugas',[PembayaranController::class, 'hapussemua']);
+        Route::post('kirimnisnpetugas',[PembayaranController::class, 'sesinisn']);
+        Route::get('batalpembayaranpetugas',[PembayaranController::class, 'batalpembayaran']);
 
         // History Pembayaran
         Route::get('historipetugas',[PembayaranController::class, 'show']);
@@ -121,11 +132,12 @@ Route::group(['middleware' => ['auth:petugas']],function() {
 
 });
 
+// History Pembayaran
+Route::get('historisiswa',[PembayaranController::class, 'show']);
 
 Route::group(['middleware' => ['auth:siswa']],function(){
 
     Route::group(['middleware' => ['CekLoginSiswa:siswa']],function() {
-        // History Pembayaran
-        Route::get('historisiswa',[PembayaranController::class, 'show']);
+
     });
 });

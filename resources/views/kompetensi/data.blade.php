@@ -29,6 +29,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>Id Kompetensi</th>
                                 <th>Kompetensi Keahlian</th>
                                 <th>Opsi</th>
                             </tr>
@@ -40,6 +41,7 @@
                             @foreach ($kompetensi as $kompetensi)
                             <tr>
                                 <td>{{ $no++ }}</td>
+                                <td>{{ $kompetensi->id_kompetensi }}</td>
                                 <td>{{ $kompetensi->kompetensi_keahlian }}</td>
                                 <td>
                                     <a href="{{ url('editkompetensipage/'.$kompetensi->id_kompetensi) }}" class="mr-2 text-warning"><i class="fas fa-edit"></i></a>

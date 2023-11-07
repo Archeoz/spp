@@ -64,7 +64,7 @@
         <strong>Copyright &copy; Archeoz .</strong>
         All rights reserved.
         <div class="float-right d-none d-sm-inline-block">
-        <b>Version</b> 0.01
+        <b>Version</b> 0.2
         </div>
     </footer>
     </div>

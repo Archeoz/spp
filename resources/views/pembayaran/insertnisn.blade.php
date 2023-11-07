@@ -28,8 +28,15 @@
                     <div class="form-group">
                         <div class="row justify-content-center">
                             <div class="col-8">
-                                <label for="">Nisn :</label>
-                                <input type="text" class="form-control" name="nisn">
+                            <label for="">Nisn :</label>
+                            <div class="row justify-content-center">
+                                <select class="js-example-basic-single" style="width: 98%" name="nisn">
+                                    <option value="" disabled selected>== Pilih Siswa ==</option>
+                                    @foreach ($siswas as $siswa)
+                                        <option value="{{ $siswa['nisn'] }}">{{ $siswa['nisn'] }}/{{ $siswa['nis'] }} | {{ $siswa['nama_siswa'] }} | {{ $siswa['nama_kelas'] }} {{ $siswa['kompetensi_keahlian'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                             </div>
                         </div>
                     </div>

@@ -67,19 +67,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="row justify-content-center">
-                            <div class="col-8">
-                                <label for="">Spp :</label>
-                                <select class="js-example-basic-multiple form-control form-control-select" multiple="multiple" name="spp[]" id="spp">
-                                    <option value="" disabled selected>== Pilih Spp ==</option>
-                                    @foreach ($spps as $spp)
-                                        <option value="{{ $spp->id_spp }}">{{ $spp->nama_kelas }} | {{ $spp->kompetensi_keahlian }} | {{ $spp->bulan }} | {{ $spp->tahun }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <div class="form-group">
                         <div class="row justify-content-center">
                             <div class="col-4">

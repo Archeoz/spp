@@ -24,7 +24,6 @@ return new class extends Migration
             $table->enum('level',['siswa'])->default('siswa');
             $table->unsignedBigInteger('id_kelas');
             $table->unsignedBigInteger('id_kompetensi');
-            $table->unsignedBigInteger('id_spp');
             $table->timestamps();
             $table->softDeletes();
         });

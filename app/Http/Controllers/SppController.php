@@ -18,11 +18,7 @@ class SppController extends Controller
      */
     public function index()
     {
-        $spps = Spp::all();
-        $spp = Spp::join('kelas', 'kelas.id_kelas', '=', 'spps.id_kelas')
-        ->leftJoin('kompetensis', 'kompetensis.id_kompetensi', '=', 'spps.id_kompetensi')
-        ->select('kelas.*','spps.*','kompetensis.*')
-        ->get();
+        $spp = Spp::all();
         // dd($spp);
         return view('spp.data',compact('spp'));
     }
@@ -54,22 +50,13 @@ class SppController extends Controller
         //ambil hanya tahun
         $tahun = $parsedDate->format('Y');
 
-        if ($request->kompetensi == null) {
-            Spp::create([
-                'bulan' => $bulan,
-                'tahun' => $tahun,
-                'nominal' => $request->nominal,
-                'id_kelas' => $request->kelas,
-            ]);
-        } else {
-            Spp::create([
-                'bulan' => $bulan,
-                'tahun' => $tahun,
-                'nominal' => $request->nominal,
-                'id_kelas' => $request->kelas,
-                'id_kompetensi' => $request->kompetensi,
-            ]);
-        }
+        Spp::create([
+            'bulan' => $bulan,
+            'tahun' => $tahun,
+            'nominal' => $request->nominal,
+        ]);
+
+
         return redirect('dataspppage');
     }
 
@@ -81,8 +68,7 @@ class SppController extends Controller
      */
     public function editpage($id_spp)
     {
-        $kelas = Kelas::all();
-        $kompetensi = Kompetensi::all();
+
         $spp =Spp::where('id_spp',$id_spp)->first();
 
         // Konversi nama bulan ke bulan angka
@@ -93,7 +79,7 @@ class SppController extends Controller
         $bulanTahun = Carbon::create($tahun, $angkaBulan);
         $bulanTahun = $bulanTahun->format('Y-m');
         // return $bulanTahun;
-        return view('spp.edit',compact('spp','kelas','kompetensi','bulanTahun'));
+        return view('spp.edit',compact('spp','bulanTahun'));
     }
 
     /**
@@ -110,22 +96,12 @@ class SppController extends Controller
         $bulan = $parsedDate->format('F');
         //ambil hanya tahun
         $tahun = $parsedDate->format('Y');
-        if ($request->kompetensi == null) {
             Spp::where('id_spp',$id_spp)->update([
                 'bulan' => $bulan,
                 'tahun' => $tahun,
                 'nominal' => $request->nominal,
-                'id_kelas' => $request->kelas,
             ]);
-        } else {
-            Spp::where('id_spp',$id_spp)->update([
-                'bulan' => $bulan,
-                'tahun' => $tahun,
-                'nominal' => $request->nominal,
-                'id_kelas' => $request->kelas,
-                'id_kompetensi' => $request->kompetensi,
-            ]);
-        }
+
         return redirect('dataspppage');
     }
 

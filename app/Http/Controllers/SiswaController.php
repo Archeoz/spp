@@ -20,9 +20,8 @@ class SiswaController extends Controller
     public function index()
     {
         $siswa = Siswa::join('kelas','kelas.id_kelas', '=', 'siswas.id_kelas')
-        ->leftJoin('spps','spps.id_spp','=','siswas.id_spp')
         ->leftJoin('kompetensis','kompetensis.id_kompetensi','=', 'siswas.id_kompetensi')
-        ->select('siswas.*','kelas.*','kompetensis.*','spps.*')
+        ->select('siswas.*','kelas.*','kompetensis.*')
         ->get();
         return view('siswa.data',compact('siswa'));
     }
@@ -36,11 +35,7 @@ class SiswaController extends Controller
     {
         $kelas = Kelas::all();
         $kompetensi = Kompetensi::all();
-        $spps = Spp::join('kelas','kelas.id_kelas','=','spps.id_kelas')
-        ->leftJoin('kompetensis','kompetensis.id_kompetensi','=','spps.id_kompetensi')
-        ->select('spps.*','kompetensis.*','kelas.*')
-        ->get();
-        return view('siswa.register',compact('kelas','kompetensi','spps'));
+        return view('siswa.register',compact('kelas','kompetensi'));
     }
 
     /**
@@ -51,32 +46,17 @@ class SiswaController extends Controller
      */
     public function store(Request $request)
     {
-        // $spp = $request->spp;
-        // return $spp;
-        // $satuan = implode('.',$spp);
-        // dd($satuan);
-        // $insertData = [];
-        // for ($i=0; $i < count($spp) ; $i++) {
-        //     array_push($spp, [
-        //         'nisn' => $request->nisn,
-        //         'nis' => $request->nis,
-        //         'password' => bcrypt($request->password),
-        //         'nama_siswa' => $request->nama,
-        //         'id_kelas' => $request->kelas,
-        //         'id_kompetensi' => $request->kompetensi,
-        //         'id_spp' => $spp[$i],
-        //         'alamat' => $request->alamat,
-        //         'telp' => $request->telp,
-        //     ]);
+
+        // $spps ='';
+        // foreach ($request->spp as $spp => $val) {
+        //     $spps = $spps.$val.',';
         // }
-        // Siswa::insertOrIgnore($insertData);
-        foreach ($request->spp as $spp) {
+        // $spps = implode(',',$request->spp);
             Siswa::updateOrInsert(
                 [
                     'nisn' => $request->nisn,
                     'nis' => $request->nis,
                     'nama_siswa' => $request->nama,
-                    'id_spp' => $spp,
                     'password' => bcrypt($request->password),
                     'id_kelas' => $request->kelas,
                     'id_kompetensi' => $request->kompetensi,
@@ -84,7 +64,6 @@ class SiswaController extends Controller
                     'telp' => $request->telp,
                 ],
             );
-        }
 
         return redirect('datasiswapage');
     }
@@ -114,13 +93,14 @@ class SiswaController extends Controller
     public function edit(Request $request, $nisn)
     {
         // dd($nisn);
+        // dd($request);
         if ($request->password == null) {
             Siswa::where('nisn',$nisn)->update([
                 'nisn' => $request->nisn,
                 'nis' => $request->nis,
                 'nama_siswa' => $request->nama,
                 'id_kelas' => $request->kelas,
-                'id_kompetensi' => $request->kelas,
+                'id_kompetensi' => $request->kompetensi,
                 'alamat' => $request->alamat,
                 'telp' => $request->telp,
             ]);
@@ -131,7 +111,7 @@ class SiswaController extends Controller
                 'password' => bcrypt($request->password),
                 'nama_siswa' => $request->nama,
                 'id_kelas' => $request->kelas,
-                'id_kompetensi' => $request->kelas,
+                'id_kompetensi' => $request->kompetensi,
                 'alamat' => $request->alamat,
                 'telp' => $request->telp,
             ]);

@@ -11,7 +11,7 @@ class Pembayaran extends Model
     use HasFactory;
     protected $fillable = [
         'id_petugas',
-        'id_siswa',
+        'nisn',
         'tgl_bayar',
         'id_spp',
         'jumlah_bayar',

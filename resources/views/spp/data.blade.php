@@ -33,8 +33,6 @@
                                 <th>Bulan</th>
                                 <th>Tahun</th>
                                 <th>Nominal</th>
-                                <th>Kelas</th>
-                                <th>Kompetensi Keahlian</th>
                                 <th>Opsi</th>
                             </tr>
                         </thead>
@@ -49,8 +47,6 @@
                                 <td>{{ $spp->bulan }}</td>
                                 <td>{{ $spp->tahun }}</td>
                                 <td>{{ $spp->nominal }}</td>
-                                <td>{{ $spp->nama_kelas }}</td>
-                                <td>{{ $spp->kompetensi_keahlian }}</td>
                                 <td>
                                     <a href="{{ url('editspppage/'.$spp->id_spp) }}" class="mr-2 text-warning"><i class="fas fa-edit"></i></a>
                                     <a href="" class="mr-2 text-danger" data-target="#hapus{{ $spp->id_spp }}" data-toggle="modal"><i class="fas fa-trash"></i></a>

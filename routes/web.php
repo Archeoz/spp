@@ -3,11 +3,14 @@
 use App\Http\Controllers\GenerateController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\KelasSppController;
 use App\Http\Controllers\KompetensiController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\Siswaspp;
+use App\Http\Controllers\SiswasppController;
 use App\Http\Controllers\SppController;
 use App\Models\Pembayaran;
 use Illuminate\Support\Facades\Route;
@@ -80,6 +83,11 @@ Route::group(['middleware' => ['auth:petugas']],function() {
         Route::get('editspppage/{id_spp}',[SppController::class, 'editpage']);
         Route::post('editspp/{id_spp}',[SppController::class, 'edit']);
         Route::get('hapusspp/{id_spp}',[SppController::class, 'destroy']);
+
+        // Kelas Spp
+        Route::get('datakelasspppage',[KelasSppController::class, 'index']);
+        Route::post('addkelasspp',[KelasSppController::class, 'store']);
+        Route::get('hapuskelasspp/{id_kelasspp}',[KelasSppController::class, 'destroy']);
 
         // Pembayaran Spp
         Route::get('tampilpembayaran',[PembayaranController::class, 'tampilnisn']);

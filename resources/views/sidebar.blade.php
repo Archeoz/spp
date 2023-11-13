@@ -77,6 +77,12 @@
                     <p>Spp</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ url('datakelasspppage') }}" class="nav-link">
+                        <i class="nav-icon fas fa-list-alt"></i>
+                    <p>KelasSpp</p>
+                    </a>
+                </li>
                 {{-- <li class="nav-item">
                     <a href="#" class="nav-link">
                     <i class="nav-icon fas fa-file-invoice-dollar"></i>

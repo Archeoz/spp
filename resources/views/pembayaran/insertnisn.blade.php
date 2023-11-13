@@ -16,7 +16,7 @@
     <div class="container">
         <div class="card o-hidden border-0 my-5">
             <div class="row justify-content-center mt-1">
-                <h2 class="text-gray">Input Nisn Siswa</h2>
+                <h2 class="text-gray">Pilih Siswa</h2>
             </div>
             <div class="card-body">
                 @if (Auth::guard('petugas')->check() && Auth::guard('petugas')->user()->level == 'admin')
@@ -28,7 +28,7 @@
                     <div class="form-group">
                         <div class="row justify-content-center">
                             <div class="col-8">
-                            <label for="">Nisn :</label>
+                            <label for="">Siswa :</label>
                             <div class="row justify-content-center">
                                 <select class="js-example-basic-single" style="width: 98%" name="nisn">
                                     <option value="" disabled selected>== Pilih Siswa ==</option>

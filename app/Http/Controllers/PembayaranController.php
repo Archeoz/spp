@@ -172,26 +172,58 @@ class PembayaranController extends Controller
 
     public function tampilnisn()
     {
-        $nisn = Siswa::select('nisn', 'nis', 'nama_siswa')
-            ->distinct()
-            ->get();
+        $nisnCollection = Siswa::select('nisn', 'nis', 'nama_siswa')
+    ->distinct()
+    ->get();
 
-        $siswa = Siswa::join('kelas', 'kelas.id_kelas', '=', 'siswas.id_kelas')
-            ->join('kompetensis', 'kompetensis.id_kompetensi', '=', 'siswas.id_kompetensi')
-            ->select('siswas.*', 'kelas.nama_kelas', 'kompetensis.kompetensi_keahlian')
-            ->get();
+$nisnsaja = $nisnCollection->pluck('nisn')->toArray();
 
-        $siswas = [];
+$subquery = Siswa::select('nisn')
+    ->distinct()
+    ->get();
 
-        foreach ($nisn as $key => $value) {
-            $siswas[] = [
-                'nisn' => $value->nisn,
-                'nis' => $value->nis,
-                'nama_siswa' => $value->nama_siswa,
-                'nama_kelas' => $siswa[$key]->nama_kelas, // Access the property using the index
-                'kompetensi_keahlian' => $siswa[$key]->kompetensi_keahlian, // Access the property using the index
-            ];
-        }
+$siswas = Siswa::join('kelas', 'kelas.id_kelas', '=', 'siswas.id_kelas')
+    ->join('kompetensis', 'kompetensis.id_kompetensi', '=', 'siswas.id_kompetensi')
+    ->whereIn('siswas.nisn', $subquery->pluck('nisn')->toArray())
+    ->select('siswas.*', 'kelas.nama_kelas', 'kompetensis.kompetensi_keahlian')
+    ->get();
+
+dd($siswas);
+
+
+        // $nisn = Siswa::select('nisn', 'nis', 'nama_siswa')
+        //     ->distinct()
+        //     ->get();
+        // $nisnsaja = [];
+        // foreach ($nisn as $key => $value) {
+        //     $nisnsaja[] = [
+        //         'nisn' => $nisn[$key]->nisn,
+        //     ];
+        // }
+        // $siswas = [];
+        // foreach ($nisnsaja as $key => $value) {
+        //     $siswa = Siswa::join('kelas', 'kelas.id_kelas', '=', 'siswas.id_kelas')
+        //     ->join('kompetensis', 'kompetensis.id_kompetensi', '=', 'siswas.id_kompetensi')
+        //     ->where('siswas.nisn',$nisnsaja[$key]['nisn'])
+        //     ->select('siswas.*', 'kelas.nama_kelas', 'kompetensis.kompetensi_keahlian')
+        //     ->groupBy('siswas.id')
+        //     ->get();
+        //     $siswas = array_merge($siswas, $siswa->toArray());
+        // }
+        // dd($siswas);
+
+        // $siswas = [];
+        // // dd($siswa);
+        // foreach ($nisn as $key => $value) {
+
+        //     $siswas[] = [
+        //         'nisn' => $value->nisn,
+        //         'nis' => $value->nis,
+        //         'nama_siswa' => $value->nama_siswa,
+        //         'nama_kelas' => $siswas[$key]->nama_kelas, // Access the property using the index
+        //         'kompetensi_keahlian' => $siswas[$key]->kompetensi_keahlian, // Access the property using the index
+        //     ];
+        // }
 
         // dd($siswas);
 

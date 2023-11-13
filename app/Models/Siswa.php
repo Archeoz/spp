@@ -30,7 +30,6 @@ class Siswa extends Authenticatable
        'level',
        'id_kelas',
        'id_kompetensi',
-       'id_spp',
     ];
 
     protected $hidden = [

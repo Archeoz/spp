@@ -6,6 +6,7 @@ use App\Models\Generate;
 
 use Barryvdh\DomPDF\PDF;
 use App\Models\Pembayaran;
+use App\Models\Siswa;
 use Illuminate\Http\Request;
 
 class GenerateController extends Controller
@@ -19,6 +20,12 @@ class GenerateController extends Controller
         ->join('spps','spps.id_spp','=','pembayarans.id_spp')
         ->select('pembayarans.*','petugas.*','siswas.*','kompetensis.*','spps.*','kelas.*')
         ->get();
+
+        $nisn = Siswa::select('nisn','nama_siswa')->distinct()->get();
+        // dd($nisn);
+        foreach ($nisn as $key => $value) {
+            $
+        }
         return view('generate.generate',compact('generate'));
     }
 

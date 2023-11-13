@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('spps', function (Blueprint $table) {
-            $table->increments('id_spp');
-            $table->string('bulan');
-            $table->integer('tahun');
-            $table->unsignedBigInteger('nominal');
+        Schema::create('kelasspps', function (Blueprint $table) {
+            $table->increments('id_kelasspp');
+            $table->unsignedBigInteger('id_kelas');
+            $table->unsignedBigInteger('id_kompetensi');
+            $table->unsignedBigInteger('id_spp');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('spps');
+        Schema::dropIfExists('siswaspps');
     }
 };

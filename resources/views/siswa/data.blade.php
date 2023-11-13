@@ -35,7 +35,7 @@
                                 <th>Kelas</th>
                                 <th>Kompetensi Keahlian</th>
                                 <th>Alamat</th>
-                                <th>Spp Bulan/Tahun</th>
+                                <th>Telp</th>
                                 <th>Opsi</th>
                             </tr>
                         </thead>
@@ -52,7 +52,7 @@
                                 <td>{{ $siswa->nama_kelas }}</td>
                                 <td>{{ $siswa->kompetensi_keahlian }}</td>
                                 <td>{{ $siswa->alamat }}</td>
-                                <td>{{ $siswa->bulan }} / {{ $siswa->tahun }}</td>
+                                <td>{{ $siswa->telp }}</td>
                                 <td>
                                     <a href="{{ url('editsiswapage/'.$siswa->nisn) }}" class="mr-2 text-warning"><i class="fas fa-edit"></i></a>
                                     <a href="" class="mr-2 text-danger" data-target="#hapus{{ $siswa->id }}" data-toggle="modal"><i class="fas fa-trash"></i></a>

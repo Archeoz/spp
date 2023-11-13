@@ -17,8 +17,8 @@ return new class extends Migration
             $table->increments('id_pembayaran');
             $table->unsignedBigInteger('id_petugas');
             $table->foreign('id_petugas')->references('id')->on('petugas');
-            $table->unsignedBigInteger('id_siswa');
-            $table->foreign('id_siswa')->references('id')->on('siswas');
+            $table->string('nisn');
+            // $table->foreign('nisn')->references('nisn')->on('siswas');
             $table->date('tgl_bayar');
             $table->unsignedBigInteger('id_spp');
             $table->unsignedBigInteger('jumlah_bayar');

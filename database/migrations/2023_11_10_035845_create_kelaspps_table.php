@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('kelasspps', function (Blueprint $table) {
             $table->increments('id_kelasspp');
             $table->unsignedBigInteger('id_kelas');
-            $table->unsignedBigInteger('id_kompetensi');
+            $table->unsignedBigInteger('id_kompetensi')->nullable();
             $table->unsignedBigInteger('id_spp');
             $table->timestamps();
             $table->softDeletes();

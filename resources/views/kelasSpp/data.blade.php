@@ -49,8 +49,9 @@
                                     </td>
                                     <td>{{ $kelasspp->bulan }} {{ $kelasspp->tahun }}</td>
                                     <td>
-                                        <a href="" class="mr-2 text-danger" data-target="#hapus{{ $kelasspp->id_kelasspp }}"
-                                            data-toggle="modal"><i class="fas fa-trash"></i></a>
+                                        <a href="" class="mr-2 text-danger"
+                                            data-target="#hapus{{ $kelasspp->id_kelasspp }}" data-toggle="modal"><i
+                                                class="fas fa-trash"></i></a>
                                     </td>
                                 </tr>
                                 <div class="modal fade" id="hapus{{ $kelasspp->id_kelasspp }}">
@@ -62,8 +63,8 @@
                                             <div class="modal-footer justify-content-between">
                                                 <button type="button" class="btn btn-default"
                                                     data-dismiss="modal">Close</button>
-                                                <a href="{{ url('hapuskelasspp/' . $kelasspp->id_kelasspp) }}" class="btn btn-danger"
-                                                    type="submit">Hapus</a>
+                                                <a href="{{ url('hapuskelasspp/' . $kelasspp->id_kelasspp) }}"
+                                                    class="btn btn-danger" type="submit">Hapus</a>
                                             </div>
                                         </div>
                                         <!-- /.modal-content -->
@@ -92,8 +93,7 @@
                                     <div class="row justify-content-center">
                                         <div class="col-6">
                                             <label for="">Kelas :</label>
-                                            <select class="form-control form-control-select" name="kelas"
-                                                id="">
+                                            <select class="form-control form-control-select" name="kelas" id="">
                                                 <option value="" disabled selected>== Pilih kelas ==</option>
                                                 @foreach ($kelas as $kelas)
                                                     <option value="{{ $kelas->id_kelas }}">{{ $kelas->nama_kelas }}
@@ -112,6 +112,7 @@
                                                         {{ $kompetensi->kompetensi_keahlian }}</option>
                                                 @endforeach
                                             </select>
+                                            {{-- <small class="mt-1" style="color: red">*Opsional</small> --}}
                                         </div>
                                     </div>
                                 </div>

@@ -85,37 +85,41 @@
                         <div class="card-body">
                             <div class="container">
                                 @if (Auth::guard('petugas')->check() && Auth::guard('petugas')->user()->level == 'admin')
-                                <form action="{{ url('kirimsesihistorisiswa') }}" method="get">                                    
-                                @elseif (Auth::guard('petugas')->check() && Auth::guard('petugas')->user()->level == 'petugas')
-                                <form action="{{ url('kirimsesihistorisiswapetugas') }}" method="get">
+                                    <form action="{{ url('kirimsesihistorisiswa') }}" method="get">
+                                    @elseif (Auth::guard('petugas')->check() && Auth::guard('petugas')->user()->level == 'petugas')
+                                        <form action="{{ url('kirimsesihistorisiswapetugas') }}" method="get">
                                 @endif
-                                    @csrf
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-8">
-                                                <label for="">Pilih Siswa :</label>
-                                                <div class="row justify-content-center">
-                                                    <select class="js-example-basic-single" style="width: 100%"
-                                                        name="nisn" onchange="this.form.submit()">
-                                                        <option value="" disabled selected>== Pilih Siswa ==</option>
-                                                        @foreach ($siswas as $siswa)
-                                                            <option value="{{ $siswa['nisn'] }}">
-                                                                {{ $siswa['nisn'] }}/{{ $siswa['nis'] }} |
-                                                                {{ $siswa['nama_siswa'] }} | {{ $siswa['nama_kelas'] }}
-                                                                {{ $siswa['kompetensi_keahlian'] }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-4 mt-5 ml-0.8">
-                                                @if (Auth::guard('petugas')->check() && Auth::guard('petugas')->user()->level == 'admin')
-                                                <a href="{{ url('hapussesihistorisiswa') }}"><i class="text-danger fas fa-trash" style="font-size: 21px"> Hapus Pilihan</i></a>
-                                                @elseif (Auth::guard('petugas')->check() && Auth::guard('petugas')->user()->level == 'petugas')
-                                                <a href="{{ url('hapussesihistorisiswapetugas') }}"><i class="text-danger fas fa-trash" style="font-size: 21px"> Hapus Pilihan</i></a>
-                                                @endif          
+                                @csrf
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <label for="">Pilih Siswa :</label>
+                                            <div class="row justify-content-center">
+                                                <select class="js-example-basic-single" style="width: 100%" name="nisn"
+                                                    onchange="this.form.submit()">
+                                                    <option value="" disabled selected>== Pilih Siswa ==</option>
+                                                    @foreach ($siswas as $siswa)
+                                                        <option value="{{ $siswa['nisn'] }}">
+                                                            {{ $siswa['nisn'] }}/{{ $siswa['nis'] }} |
+                                                            {{ $siswa['nama_siswa'] }} | {{ $siswa['nama_kelas'] }}
+                                                            {{ $siswa['kompetensi_keahlian'] }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
+                                        <div class="col-4 mt-5 ml-0.8">
+                                            @if (Auth::guard('petugas')->check() && Auth::guard('petugas')->user()->level == 'admin')
+                                                <a href="{{ url('hapussesihistorisiswa') }}"><i
+                                                        class="text-danger fas fa-trash" style="font-size: 21px"> Hapus
+                                                        Pilihan</i></a>
+                                            @elseif (Auth::guard('petugas')->check() && Auth::guard('petugas')->user()->level == 'petugas')
+                                                <a href="{{ url('hapussesihistorisiswapetugas') }}"><i
+                                                        class="text-danger fas fa-trash" style="font-size: 21px"> Hapus
+                                                        Pilihan</i></a>
+                                            @endif
+                                        </div>
                                     </div>
+                                </div>
                                 </form>
                             </div>
                             <div class="table-responsive">
@@ -242,7 +246,6 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Spp Bulan,Tahun</th>
-                                            <th>Kelas / Kompetensi Keahlian</th>
                                             <th>Nominal</th>
                                         </tr>
                                     </thead>
@@ -254,8 +257,6 @@
                                             <tr>
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $tagihan['bulan'] }} {{ $tagihan['tahun'] }}</td>
-                                                <td>{{ $tagihan['nama_kelas'] }} {{ $tagihan['kompetensi_keahlian'] }}
-                                                </td>
                                                 <td>{{ $tagihan['nominal'] }}</td>
                                             </tr>
                                             <div class="modal fade" id="hapus">

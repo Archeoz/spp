@@ -12,7 +12,7 @@ class LoginController extends Controller
     }
 
     public function loginsiswapage() {
-        return view('loginSiswa');
+        return view('loginSiswa'); 
     }
 
     public function loginAdmin(Request $request) {

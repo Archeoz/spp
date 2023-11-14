@@ -21,14 +21,14 @@ class KelasSppController extends Controller
         $kelas = Kelas::all();
         $kompetensi = Kompetensi::all();
 
-        $kelasspp = KelasSpp::join('kelas','kelas.id_kelas','=','kelasspps.id_kelas')
-        ->leftJoin('kompetensis','kompetensis.id_kompetensi','=','kelasspps.id_kompetensi')
-        ->join('spps','spps.id_spp','=','kelasspps.id_spp')
-        ->select('kelas.*','kompetensis.*','spps.*','kelasspps.*')
-        ->get();
+        $kelasspp = KelasSpp::join('kelas', 'kelas.id_kelas', '=', 'kelasspps.id_kelas')
+            ->leftJoin('kompetensis', 'kompetensis.id_kompetensi', '=', 'kelasspps.id_kompetensi')
+            ->join('spps', 'spps.id_spp', '=', 'kelasspps.id_spp')
+            ->select('kelas.*', 'kompetensis.*', 'spps.*', 'kelasspps.*')
+            ->get();
 
         // dd($kelasspp);
-        return view('kelasSpp.data',compact('kelasspp','spp','kelas','kompetensi'));
+        return view('kelasSpp.data', compact('kelasspp', 'spp', 'kelas', 'kompetensi'));
     }
 
     /**
@@ -49,13 +49,24 @@ class KelasSppController extends Controller
      */
     public function store(Request $request)
     {
-        foreach ($request->spp as $key => $value) {
-            KelasSpp::updateOrInsert([
-                'id_kelas' => $request->kelas,
-                'id_kompetensi' => $request->kompetensi,
-                'id_spp' => $value,
-            ]);
+        if ($request->has('kompetensi')) {
+            foreach ($request->spp as $key => $value) {
+                KelasSpp::updateOrInsert([
+                    'id_kelas' => $request->kelas,
+                    'id_kompetensi' => $request->kompetensi,
+                    'id_spp' => $value,
+                ]);
+            }
+        } elseif($request->kompetensi == null) {
+            foreach ($request->spp as $key => $value) {
+                KelasSpp::updateOrInsert([
+                    'id_kelas' => $request->kelas,
+                    'id_spp' => $value,
+                ]);
+            }
         }
+
+
         return redirect('datakelasspppage');
     }
 
@@ -101,7 +112,7 @@ class KelasSppController extends Controller
      */
     public function destroy($id_kelasspp)
     {
-        KelasSpp::where('id_kelasspp','=',$id_kelasspp)->delete();
+        KelasSpp::where('id_kelasspp', '=', $id_kelasspp)->delete();
         return back();
     }
 }

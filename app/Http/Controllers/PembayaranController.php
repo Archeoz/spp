@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kelas;
-use App\Models\Pembayaran;
-use App\Models\Siswa;
 use App\Models\Spp;
+use App\Models\Kelas;
+use App\Models\Siswa;
+use App\Models\KelasSpp;
+use App\Models\Pembayaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,14 +25,22 @@ class PembayaranController extends Controller
         session()->forget('historisiswa');
         if ($request->has('nisn')) {
             $nisn = $request->nisn;
-            $dataSiswa = Siswa::where('nisn', $nisn)->get();
-            $idsppSiswa = [];
+            $dataSiswa = Siswa::join('kelas','kelas.id_kelas','siswas.id_kelas')
+            ->join('kompetensis','kompetensis.id_kompetensi','siswas.id_kompetensi')
+            ->where('nisn', $nisn)
+            ->select('siswas.*','kompetensis.*','kelas.*')
+            ->first();
 
-            foreach ($dataSiswa as $siswa) {
-                $idsppSiswa[] = $siswa->id_spp;
+            $spps = KelasSpp::where('id_kelas',$dataSiswa->id_kelas)
+            ->where('id_kompetensi',$dataSiswa->id_kompetensi)
+            ->get();
+
+            $idsppSiswa = [];
+            foreach ($spps as $spps) {
+                $idsppSiswa[] = $spps->id_spp;
             }
             // dd($idsppSiswa);
-            $dataHistori = Pembayaran::join('siswas', 'siswas.id', 'pembayarans.id_siswa')
+            $dataHistori = Pembayaran::join('siswas', 'siswas.nisn', 'pembayarans.nisn')
                 ->where('siswas.nisn', $nisn)
                 ->select('pembayarans.*')
                 ->get();
@@ -48,16 +57,11 @@ class PembayaranController extends Controller
 
             $tagihan = [];
             foreach ($missingIdSpp as $value) {
-                $tagihanSpp = Spp::join('kelas', 'kelas.id_kelas', 'spps.id_kelas')
-                    ->leftJoin('kompetensis', 'kompetensis.id_kompetensi', 'spps.id_kompetensi')
-                    ->where('id_spp', $value)
-                    ->select('kelas.*', 'kompetensis.*', 'spps.*')
+                $tagihanSpp = Spp::where('id_spp', $value)
                     ->get();
 
                 foreach ($tagihanSpp as $key) {
                     $tagihan[] = [
-                        'nama_kelas' => $key->nama_kelas,
-                        'kompetensi_keahlian' => $key->kompetensi_keahlian,
                         'bulan' => $key->bulan,
                         'tahun' => $key->tahun,
                         'nominal' => $key->nominal,
@@ -67,11 +71,11 @@ class PembayaranController extends Controller
             $sesihistori = session()->get('historisiswa', []);
             foreach ($tagihan as $key) {
                 $sesihistori[] = [
-                    'nisn' => $dataSiswa[0]->nisn, // Access the first element directly
-                    'nis' => $dataSiswa[0]->nis, // Access the first element directly
-                    'nama_siswa' => $dataSiswa[0]->nama_siswa, // Access the first element directly
-                    'nama_kelas' => $key['nama_kelas'],
-                    'kompetensi_keahlian' => $key['kompetensi_keahlian'],
+                    'nisn' => $dataSiswa->nisn, // Access the first element directly
+                    'nis' => $dataSiswa->nis, // Access the first element directly
+                    'nama_siswa' => $dataSiswa->nama_siswa, // Access the first element directly
+                    'nama_kelas' => $dataSiswa->nama_kelas,
+                    'kompetensi_keahlian' => $dataSiswa->kompetensi_keahlian,
                     'bulan' => $key['bulan'],
                     'tahun' => $key['tahun'],
                     'nominal' => $key['nominal'],
@@ -123,12 +127,7 @@ class PembayaranController extends Controller
             $id_spp = $request->spp;
             // dd($id_spp);
             $spp = Spp::where('id_spp', $id_spp)->first();
-            $kelas = Spp::join('kelas', 'kelas.id_kelas', '=', 'spps.id_kelas')
-                ->leftJoin('kompetensis', 'kompetensis.id_kompetensi', '=', 'spps.id_kompetensi')
-                ->where('spps.id_spp', '=', $spp->id_spp)
-                // ->orWhere('spps.id_kompetensi', '=', $spp->id_kompetensi)
-                ->select('spps.*', 'kelas.*', 'kompetensis.*')
-                ->first();
+
             // dd($kelas);
 
             $pilihanspp = session()->get('pilihanspp', []);
@@ -138,11 +137,9 @@ class PembayaranController extends Controller
             } else {
                 $pilihanspp[$id_spp] = [
                     'id_spp' => $id_spp,
-                    'bulan' => $kelas->bulan,
-                    'tahun' => $kelas->tahun,
-                    'kelas' => $kelas->nama_kelas,
-                    'kompetensi' => $kelas->kompetensi_keahlian,
-                    'nominal' => $kelas->nominal,
+                    'bulan' => $spp->bulan,
+                    'tahun' => $spp->tahun,
+                    'nominal' => $spp->nominal,
                 ];
             }
 
@@ -172,23 +169,23 @@ class PembayaranController extends Controller
 
     public function tampilnisn()
     {
-        $nisnCollection = Siswa::select('nisn', 'nis', 'nama_siswa')
-    ->distinct()
-    ->get();
+        // $nisnCollection = Siswa::select('nisn', 'nis', 'nama_siswa')
+        //     ->distinct()
+        //     ->get();
 
-$nisnsaja = $nisnCollection->pluck('nisn')->toArray();
+        // $nisnsaja = $nisnCollection->pluck('nisn')->toArray();
 
-$subquery = Siswa::select('nisn')
-    ->distinct()
-    ->get();
+        // $subquery = Siswa::select('nisn')
+        //     ->distinct()
+        //     ->get();
 
-$siswas = Siswa::join('kelas', 'kelas.id_kelas', '=', 'siswas.id_kelas')
-    ->join('kompetensis', 'kompetensis.id_kompetensi', '=', 'siswas.id_kompetensi')
-    ->whereIn('siswas.nisn', $subquery->pluck('nisn')->toArray())
-    ->select('siswas.*', 'kelas.nama_kelas', 'kompetensis.kompetensi_keahlian')
-    ->get();
+        $siswas = Siswa::join('kelas', 'kelas.id_kelas', '=', 'siswas.id_kelas')
+            ->join('kompetensis', 'kompetensis.id_kompetensi', '=', 'siswas.id_kompetensi')
+            // ->whereIn('siswas.nisn', $subquery->pluck('nisn')->toArray())
+            ->select('siswas.*', 'kelas.nama_kelas', 'kompetensis.kompetensi_keahlian')
+            ->get();
 
-dd($siswas);
+        // dd($siswas);
 
 
         // $nisn = Siswa::select('nisn', 'nis', 'nama_siswa')
@@ -240,19 +237,29 @@ dd($siswas);
             ->join('kompetensis', 'kompetensis.id_kompetensi', '=', 'siswas.id_kompetensi')
             ->where('siswas.nisn', $sesinisn)
             ->select('kelas.*', 'siswas.*', 'kompetensis.*')
+            ->first();
+
+        $spps = KelasSpp::where('id_kelas', '=', $siswa->id_kelas)
+            ->where('id_kompetensi', '=', $siswa->id_kompetensi)
             ->get();
 
-        $idspp = [];
-        foreach ($siswa as $siswa) {
-            $idspp[] = $siswa->id_spp;
-        }
-        // dd($idspp);
+        // $spps = KelasSpp::where('id_kelas', $siswa->id_kelas)
+        //     ->where(function ($query) use ($siswa) {
+        //         $query->where('id_kompetensi', '!=', $siswa->id_kompetensi)
+        //             ->orWhereNull('id_kompetensi');
+        //     })
+        //     ->get();
 
-        $dataHistori = Pembayaran::join('siswas', 'siswas.id', 'pembayarans.id_siswa')
+        $idspps = [];
+        foreach ($spps as $data) {
+            $idspps[] = $data->id_spp;
+        }
+
+        $dataHistori = Pembayaran::join('siswas', 'siswas.nisn', 'pembayarans.nisn')
             ->where('siswas.nisn', $sesinisn)
             ->select('pembayarans.*')
             ->get();
-        // $dataHistori = Pembayaran::all();
+
         $idsppHistori = [];
         // dd($dataHistori);
         foreach ($dataHistori as $data) {
@@ -260,29 +267,25 @@ dd($siswas);
         }
         // dd($idsppHistori);
         // Cari id_spp yang ada di tabel siswa tapi tidak ada di tabel riwayat
-        $missingIdSpp = array_diff($idspp, $idsppHistori);
+        $missingIdSpp = array_diff($idspps, $idsppHistori);
         // dd($missingIdSpp);
 
         $spp = [];
         foreach ($missingIdSpp as $value) {
-            $tagihanSpp = Spp::join('kelas', 'kelas.id_kelas', 'spps.id_kelas')
-                ->leftJoin('kompetensis', 'kompetensis.id_kompetensi', 'spps.id_kompetensi')
-                ->where('id_spp', $value)
-                ->select('kelas.*', 'kompetensis.*', 'spps.*')
+            $tagihanSpp = Spp::where('id_spp', $value)
                 ->get();
 
             foreach ($tagihanSpp as $key) {
                 $spp[] = [
                     'id_spp' => $key->id_spp,
-                    'nama_kelas' => $key->nama_kelas,
-                    'kompetensi_keahlian' => $key->kompetensi_keahlian,
                     'bulan' => $key->bulan,
                     'tahun' => $key->tahun,
                     'nominal' => $key->nominal,
                 ];
             }
         }
-        return view('pembayaran.register', compact('siswa', 'spp'));
+
+        return view('pembayaran.register', compact('siswa','spp'));
     }
     /**
      * Store a newly created resource in storage.
@@ -296,14 +299,15 @@ dd($siswas);
         // dd($user);
         // dd($request->nisn);
         $sesispp = session()->get('pilihanspp');
-        $ceknisn = Siswa::where('nisn', '=', $request->nisn)->first();
-        $id_siswa = $ceknisn->id;
+        $nisn = $request->nisn;
+        // $ceknisn = Siswa::where('nisn', '=', $request->nisn)->first();
+        // $id_siswa = $ceknisn->id;
         foreach ($sesispp as $key => $value) {
             $id_spp = $value['id_spp'];
 
             Pembayaran::updateOrInsert(
                 [
-                    'id_siswa' => $id_siswa,
+                    'nisn' => $nisn,
                     'id_spp' => $id_spp,
                 ],
                 [
@@ -336,7 +340,7 @@ dd($siswas);
         if (Auth::guard('petugas')->user()) {
             if (Auth::guard('petugas')->user()->level == 'admin') {
                 $histori = Pembayaran::join('petugas', 'petugas.id', '=', 'pembayarans.id_petugas')
-                    ->join('siswas', 'siswas.id', '=', 'pembayarans.id_siswa')
+                    ->join('siswas', 'siswas.nisn', '=', 'pembayarans.nisn')
                     ->join('kelas', 'kelas.id_kelas', '=', 'siswas.id_kelas')
                     ->join('kompetensis', 'kompetensis.id_kompetensi', '=', 'siswas.id_kompetensi')
                     ->join('spps', 'spps.id_spp', '=', 'pembayarans.id_spp')
@@ -400,23 +404,26 @@ dd($siswas);
         } elseif (Auth::guard('siswa')->user()) {
             $siswa = Auth::guard('siswa')->user();
             $histori = Pembayaran::join('petugas', 'petugas.id', '=', 'pembayarans.id_petugas')
-                ->join('siswas', 'siswas.id', '=', 'pembayarans.id_siswa')
+                ->join('siswas', 'siswas.nisn', '=', 'pembayarans.nisn')
                 ->join('kelas', 'kelas.id_kelas', '=', 'siswas.id_kelas')
                 ->join('kompetensis', 'kompetensis.id_kompetensi', '=', 'siswas.id_kompetensi')
                 ->join('spps', 'spps.id_spp', '=', 'pembayarans.id_spp')
-                ->where('pembayarans.id_siswa', $siswa->id)
+                ->where('pembayarans.nisn', $siswa->nisn)
                 ->select('pembayarans.*', 'petugas.*', 'siswas.*', 'kompetensis.*', 'spps.*', 'kelas.*')
                 ->get();
 
             $nisn = $siswa->nisn;
-            $dataSiswa = Siswa::where('nisn', $nisn)->get();
-            $idsppSiswa = [];
+            $dataSiswa = Siswa::where('nisn', $nisn)->first();
+            $spps = KelasSpp::where('id_kelas',$dataSiswa->id_kelas)
+            ->where('id_kompetensi',$dataSiswa->id_kompetensi)
+            ->get();
 
-            foreach ($dataSiswa as $siswa) {
-                $idsppSiswa[] = $siswa->id_spp;
+            $idsppSiswa = [];
+            foreach ($spps as $spp) {
+                $idsppSiswa[] = $spp->id_spp;
             }
             // dd($idsppSiswa);
-            $dataHistori = Pembayaran::join('siswas', 'siswas.id', 'pembayarans.id_siswa')
+            $dataHistori = Pembayaran::join('siswas', 'siswas.nisn', 'pembayarans.nisn')
                 ->where('siswas.nisn', $nisn)
                 ->select('pembayarans.*')
                 ->get();
@@ -433,16 +440,11 @@ dd($siswas);
 
             $tagihan = [];
             foreach ($missingIdSpp as $value) {
-                $tagihanSpp = Spp::join('kelas', 'kelas.id_kelas', 'spps.id_kelas')
-                    ->leftJoin('kompetensis', 'kompetensis.id_kompetensi', 'spps.id_kompetensi')
-                    ->where('id_spp', $value)
-                    ->select('kelas.*', 'kompetensis.*', 'spps.*')
+                $tagihanSpp = Spp::where('id_spp', $value)
                     ->get();
 
                 foreach ($tagihanSpp as $key) {
                     $tagihan[] = [
-                        'nama_kelas' => $key->nama_kelas,
-                        'kompetensi_keahlian' => $key->kompetensi_keahlian,
                         'bulan' => $key->bulan,
                         'tahun' => $key->tahun,
                         'nominal' => $key->nominal,

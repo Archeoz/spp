@@ -41,8 +41,8 @@
                             onchange="this.form.submit()">
                             <option value="" disabled selected>== Pilih Spp ==</option>
                             @foreach ($spp as $sppItem)
-                                <option value="{{ $sppItem['id_spp'] }}">{{ $sppItem['nama_kelas'] }} |
-                                    {{ $sppItem['kompetensi_keahlian'] }} | {{ $sppItem['bulan'] }} | {{ $sppItem['tahun'] }}
+                                <option value="{{ $sppItem['id_spp'] }}">
+                                    {{ $sppItem['bulan'] }} | {{ $sppItem['tahun'] }}
                                     | {{ $sppItem['nominal'] }}</option>
                             @endforeach
                         </select>
@@ -65,8 +65,6 @@
                                     <th>No</th>
                                     <th>Bulan</th>
                                     <th>Tahun</th>
-                                    <th>Kelas</th>
-                                    <th>Kompetensi Keahlian</th>
                                     <th>Nominal</th>
                                     <th>Opsi</th>
                                 </tr>
@@ -82,8 +80,6 @@
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $spp['bulan'] }}</td>
                                             <td>{{ $spp['tahun'] }}</td>
-                                            <td>{{ $spp['kelas'] }}</td>
-                                            <td>{{ $spp['kompetensi'] }}</td>
                                             <td>{{ $spp['nominal'] }}</td>
                                             @if (Auth::guard('petugas')->check() && Auth::guard('petugas')->user()->level == 'admin')
                                                 <td><a href="{{ url('hapussesi/' . $spp['id_spp']) }}"
@@ -98,7 +94,7 @@
                                         @endphp
                                     @endforeach
                                     <tr>
-                                        <td colspan="5">Total :</td>
+                                        <td colspan="3">Total :</td>
                                         <td>{{ $total }}</td>
                                     </tr>
                                 @endif
